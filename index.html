@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Litera</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <h1>Litera</h1>
+            <ul>
+                <li><a href="#input-section">Input Buku</a></li>
+                <li><a href="#book-list-section">Daftar Buku</a></li>
+                <li><a href="#reminder-section">Pengingat</a></li>
+                <li><a href="#stats-section">Statistik</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="main-content">
+        <div id="input-section" class="input-section card">
+            <h2>Tambah Buku Baru</h2>
+            <button id="openAddBookModal" type="button">➕ Tambah Buku Baru</button>
+
+            <div class="backup-controls">
+                <input type="file" id="importFile" accept=".json" style="display:none">
+                <button id="importButton" class="backup-btn">📥 Import dari JSON</button>
+                <button id="exportButton" class="backup-btn">📤 Export ke JSON</button>
+            </div>
+        </div>
+
+        <div id="book-list-section" class="book-list-section card">
+            <h2>Daftar Buku</h2>
+            <div class="filter-search-section">
+                <div class="form-group">
+                    <label for="filterType">Filter Jenis:</label>
+                    <select id="filterType">
+                        <option value="all">Semua</option>
+                        <option value="online">Online</option>
+                        <option value="offline">Offline</option>
+                        <option value="has-read-days">Sudah Pernah Dibaca</option>
+                        <option value="no-read-days">Belum Pernah Dibaca</option>
+                        <option value="has-rating">Memiliki Rating</option>
+                        <option value="has-cover">Memiliki Sampul</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="searchInput">Cari:</label>
+                    <input type="text" id="searchInput" placeholder="Judul atau Penulis" />
+                </div>
+            </div>
+            <ul id="bookList"></ul>
+            <div class="form-group">
+                <label for="searchInput">Cari:</label>
+                <input type="text" id="searchInput" placeholder="Judul atau Penulis" />
+            </div>
+
+            <div class="form-group">
+                <label for="sortBy">Urutkan Berdasarkan:</label>
+                <select id="sortBy">
+                    <option value="id">Terbaru (Default)</option>
+                    <option value="title">Judul (A-Z)</option>
+                    <option value="author">Penulis (A-Z)</option>
+                    <option value="publishedYear">Tahun Terbit (Terbaru Dulu)</option>
+                    <option value="rating">Rating (Tertinggi Dulu)</option>
+                    <option value="currentPage">Halaman Terakhir (Tertinggi Dulu)</option>
+                    <option value="readDaysCount">Hari Dibaca (Terbanyak Dulu)</option>
+                </select>
+            </div>
+            </div> ```
+        </div>
+
+        <div id="reminder-section" class="reminder-section card">
+            <h2>Pengingat Baca Harian</h2>
+            <div class="form-group">
+                <label for="reminderTime">Waktu Pengingat:</label>
+                <input type="time" id="reminderTime" value="20:00" />
+            </div>
+            <p class="reminder-info">Pengingat akan dicek saat halaman dimuat ulang (jika waktu sudah lewat dan belum diingatkan hari ini).</p>
+        </div>
+
+    <div id="stats-section" class="stats-section card">
+            <div class="stats-header">
+                 <h2>Statistik Membaca</h2>
+                 <button id="toggleStatsList" type="button" class="toggle-stats-button">[Tampilkan Detail]</button>
+            </div>
+
+            <div id="statsContainer">
+                <canvas id="readingChart"></canvas>
+            </div>
+             <p id="totalReadingDays"></p>
+
+            <div id="statsBookListContainer" class="collapsible-list">
+                <ul id="statsBookList"></ul> </div>
+    </div>
+
+    </div> <div id="bookModal" class="modal">
+        <div class="modal-content card">
+            <span class="close-button edit-close-button">&times;</span>
+            <h2 id="modalTitle">Tambah Buku Baru</h2>
+            <form id="bookForm">
+                <input type="hidden" id="bookIndex"> <div class="form-group">
+                    <label for="modalTitleInput">Judul:</label>
+                    <input type="text" id="modalTitleInput" required />
+                </div>
+                <div class="form-group">
+                    <label for="modalAuthorInput">Penulis:</label>
+                    <input type="text" id="modalAuthorInput" />
+                </div>
+                <div class="form-group">
+                    <label for="modalTypeSelect">Jenis:</label>
+                    <select id="modalTypeSelect">
+                        <option value="offline">Offline</option>
+                        <option value="online">Online</option>
+                    </select>
+                </div>
+                 <div class="form-group">
+                    <label for="modalIsbnInput">ISBN:</label>
+                    <input type="text" id="modalIsbnInput" placeholder="Opsional" />
+                </div>
+                 <div class="form-group">
+                    <label for="modalPublishedYearInput">Tahun Terbit:</label>
+                    <input type="number" id="modalPublishedYearInput" placeholder="Opsional" min="0" max="2100" />
+                </div>
+                 <div class="form-group">
+                    <label for="modalRatingInput">Rating (1-5):</label>
+                    <input type="number" id="modalRatingInput" placeholder="Opsional" min="0" max="5" step="0.1" />
+                </div>
+                 <div class="form-group">
+                    <label for="modalCurrentPageInput">Halaman Terakhir Dibaca:</label>
+                    <input type="number" id="modalCurrentPageInput" placeholder="Opsional" min="0" />
+                </div>
+                <div class="form-group">
+                    <label for="modalNotesInput">Catatan:</label>
+                    <textarea id="modalNotesInput" placeholder="Catatan tentang buku ini" rows="3"></textarea>
+                </div>
+                 <div class="form-group">
+                    <label for="modalCoverImageUrlInput">URL Gambar Sampul:</label>
+                    <input type="url" id="modalCoverImageUrlInput" placeholder="Opsional" />
+                </div>
+                <button type="submit" id="saveBookButton">Simpan Buku</button>
+            </form>
+        </div>
+    </div>
+    <div id="bookDetailModal" class="modal">
+        <div class="modal-content card">
+            <span class="close-button detail-close-button">&times;</span>
+            <div class="book-detail-container">
+                <img id="detailCoverImage" src="" alt="Sampul Buku" class="book-cover-large" style="display: none;"> <div class="book-detail-info">
+                    <h2 id="detailTitle">Judul Buku</h2>
+                    <p id="detailAuthor" class="detail-meta">Penulis</p>
+                    <p id="detailType" class="detail-meta">Jenis</p>
+                    <p id="detailPublishedYear" class="detail-meta">Tahun Terbit:</p>
+                    <p id="detailRating" class="detail-meta">Rating:</p>
+                    <p id="detailCurrentPage" class="detail-meta">Halaman Terakhir:</p>
+                    <p id="detailIsbn" class="detail-meta">ISBN:</p>
+                    <div class="detail-notes-section">
+                        <h3>Catatan:</h3>
+                        <p id="detailNotes"></p>
+                    </div>
+                    <p id="detailReadDays" class="detail-meta">Dibaca selama:</p> </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dexie@3.2.2/dist/dexie.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
